@@ -1,21 +1,23 @@
 import { useContext } from "react";
-import AuthContext from "./store/auth-context";
+import AuthContext, { AuthProvider } from "./store/auth-context";
 
 function App() {
   return (
     // Provider는 컴포넌트이다.
     // 모든 자식 컴포넌트들이 Context에 접근할 수 있게된다.
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: false,
-        login: () => console.log("login"),
-      }}
-    >
+    // <AuthContext.Provider
+    //   value={{
+    //     isLoggedIn: false,
+    //     login: () => console.log("login"),
+    //   }}
+    // >
+    <AuthProvider>
       <main>
         <Navgiation />
         <Section />
       </main>
-    </AuthContext.Provider>
+    </AuthProvider>
+    // </AuthContext.Provider>
   );
 }
 

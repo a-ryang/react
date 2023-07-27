@@ -1,6 +1,5 @@
+import { ReactNode, createContext, useState } from "react";
 // 파스켈 케이스 AuthContext는 컴포넌트가 있다는 뜻
-
-import { createContext } from "react";
 
 interface AuthState {
   isLoggedIn: boolean;
@@ -16,5 +15,28 @@ const AuthContext = createContext<AuthState & AuthAction>({
   isLoggedIn: false,
   login: () => console.log("logout"),
 });
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        login: handleLogin,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default AuthContext;
