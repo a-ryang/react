@@ -40,3 +40,41 @@ return (
   </>
 );
 ```
+
+## 옛 상태를 기반으로 올바르게 상태 업데이트하기
+
+state를 변경할 떄 이전 값을 기반으로 변경해야 하는 경우, 다음 예시처럼 상태를 변경하는 것은 잘못된 방법이다:
+
+```jsx
+const [isEditing, setIsEditing] = useState(false);
+
+function handleEditClick() {
+  setIsEditing(!isEditing); // Bad
+}
+```
+
+이전 state를 기반으로 state를 업데이트하려면, state 업데이트 함수에 새로운 함수를 전달해야 한다. 이 방법으로 상태의 최신 값을 보장한다:
+
+```jsx
+const [isEditing, setIsEditing] = useState(false);
+
+function handleEditClick() {
+  setIsEditing((isEditing) => !isEditing); // Good
+}
+```
+
+왜 함수로 보내야할까?
+
+`setIsEditing(!isEditing)`를 사용할 때, 리액트는 state 변경에 대한 스케줄을 조정한다.
+state 변경은 즉시 발생하지 않고, 리액트가 미래에 수행할 상태 변경을 스케줄링한다.
+
+```jsx
+const [isEditing, setIsEditing] = useState(false);
+
+function handleEditClick() {
+  setIsEditing(!isEditing); // true로 state 업데이트 스케줄링
+  setIsEditing(!isEditing); // true로 state 업데이트 스케줄링
+}
+```
+
+이 상황에서 함수를 사용하면, 리액트는 각 상태 업데이트에 대해 최신의 `isEditing` 값을 사용하여 올바르게 동작한다.
